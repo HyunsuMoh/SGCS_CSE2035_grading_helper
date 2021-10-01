@@ -10,12 +10,9 @@ then
 		mkdir $1/testcases
 		mkdir $1/executables
 		mkdir $1/results
-		cp $targetdir/resources/Makefile $1
-		cp $targetdir/resources/student_list.txt $1
+		cp $targetdir/resources/grade.sh $1
 	fi
 
 else
 	echo "Usage: sh create_workspace <workspace_name>"
 fi
-
-echo "$0 $1"
