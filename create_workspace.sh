@@ -10,7 +10,9 @@ then
 		mkdir $1/testcases
 		mkdir $1/executables
 		mkdir $1/results
+		mkdir $1/answers
 		cp $targetdir/resources/grade.sh $1
+		cp $targetdir/resources/compare.py $1
 	fi
 
 else
