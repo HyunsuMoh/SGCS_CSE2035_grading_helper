@@ -1,4 +1,13 @@
 rm -f total.result
+
+# Remove the name tag
+for code in $(ls codes/\[*\]*.c)
+do
+	tmp=codes/${code##codes/\[*\]}
+	newname=${tmp%-?.c}.c
+	mv $code $newname 
+done
+
 for code in $(ls codes)
 do
 # Build
