@@ -1,12 +1,15 @@
 rm -f total.result
 
 # Remove the name tag
+OIFS=$IFS
+IFS="\t"
 for code in $(ls codes/\[*\]*.c)
 do
 	tmp=codes/${code##codes/\[*\]}
 	newname=${tmp%-?.c}.c
 	mv $code $newname 
 done
+IFS=$OIFS
 
 for code in $(ls codes)
 do
@@ -23,11 +26,12 @@ do
 		echo "$testcase: " >> results/$id.result
 		executables/$id.out < testcases/$testcase > results/$id_$testcase
 		python3 compare.py answers/$testcase < results/$id_$testcase >> results/$id.result
+		echo "" >> results/$id.result
 		cat results/$id_$testcase >> results/$id.result
 		echo "" >> results/$id.result
 	done
 	cat results/$id.result >> total.result
 	echo "Source code:" >> total.result
 	cat codes/$code >> total.result
-	echo "\n" >> total.result
+	echo "\n" >> report.result
 done
