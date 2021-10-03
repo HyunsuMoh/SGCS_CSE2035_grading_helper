@@ -24,10 +24,10 @@ do
 	for testcase in $(ls testcases)
 	do
 		echo "$testcase: " >> results/$id.result
-		executables/$id.out < testcases/$testcase > results/$id_$testcase
-		python3 compare.py answers/$testcase < results/$id_$testcase >> results/$id.result
+		executables/$id.out < testcases/$testcase > results/$id\_$testcase
+		python3 compare.py answers/$testcase < results/$id\_$testcase >> results/$id.result
 		echo "" >> results/$id.result
-		cat results/$id_$testcase >> results/$id.result
+		cat results/$id\_$testcase >> results/$id.result
 		echo "" >> results/$id.result
 	done
 	cat results/$id.result >> total.result
