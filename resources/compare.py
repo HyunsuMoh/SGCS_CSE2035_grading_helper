@@ -18,4 +18,4 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	f = open(args.filename)
 	a = sys.stdin
-	print(getData(f) == getData(a))
+	print(int(getData(f) == getData(a)))
