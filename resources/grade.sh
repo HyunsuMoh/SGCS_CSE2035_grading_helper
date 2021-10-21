@@ -1,4 +1,30 @@
 #!/bin/bash
+
+# Get options & construct FIFO queues for file I/O
+inputIdx=0
+outputIdx=0
+while getopts "i:o:" opt
+do
+	case $opt in
+		i)
+			inputFile[inputIdx]=$OPTARG
+			mkfifo $OPTARG
+			inputIdx=$((inputIdx + 1))
+			;;
+		o)
+			outputFile[outputIdx]=$OPTARG
+			mkfifo $OPTARG
+			outputIdx=$((outputIdx + 1))
+			;;
+		\?)
+			exit
+			;;
+		:)
+			exit
+			;;
+	esac
+done
+
 rm -f report.result
 
 # Remove the name tag
@@ -26,11 +52,31 @@ do
 # Run the program and evaluate the result
 	for testcase in testcases/*
 	do
+		if [[ -d $testcase ]]
+		then
+			continue
+		fi
 		tcname=${testcase#testcases/}
+		for file in ${inputFile[@]}
+		do
+			cat testcases/file/$tcname\_$file > $file &
+		done
+		for file in ${outputFile[@]}
+		do
+			cat $file > results/$id\_$tcname\_$file &
+		done
 		executables/$id.out < testcases/$tcname > results/$id\_$tcname
+		value=$(python3 compare.py answers/$tcname < results/$id\_$tcname)
+		for file in ${outputFile[@]}
+		do
+			echo "" >> results/$id\_$tcname
+			echo "$file:" >> results/$id\_$tcname
+			cat results/$id\_$tcname\_$file >> results/$id\_$tcname
+			temp=$(python3 compare.py answers/file/$tcname\_$file < results/$id\_$tcname\_$file)
+			value=$((value * temp))
+		done
 		varname=score_${tcname%.*}
-		eval "$varname"='$(python3 compare.py answers/$tcname < results/$id\_$tcname)'
-		eval value=\$$varname
+		eval "$varname"='$value'
 		score=$((score + value))
 		max_score=$((max_score + 1))
 	done
@@ -40,6 +86,10 @@ do
 # Show the result
 	for testcase in testcases/*
 	do
+		if [[ -d $testcase ]]
+		then
+			continue
+		fi
 		tcname=${testcase#testcases/}
 		varname=score_${tcname%.*}
 		eval value=\$$varname
@@ -52,4 +102,13 @@ do
 	echo "Source code:" >> report.result
 	cat $code >> report.result
 	echo "\n" >> report.result
+done
+
+for queue in ${inputFile[@]}
+do
+	rm $queue
+done
+for queue in ${outputFile[@]}
+do
+	rm $queue
 done

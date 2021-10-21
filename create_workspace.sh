@@ -9,9 +9,11 @@ then
 		mkdir $1
 		mkdir $1/codes
 		mkdir $1/testcases
+		mkdir $1/testcases/files
 		mkdir $1/executables
 		mkdir $1/results
 		mkdir $1/answers
+		mkdir $1/answers/files
 		cp $targetdir/resources/grade.sh $1
 		cp $targetdir/resources/compare.py $1
 	fi
