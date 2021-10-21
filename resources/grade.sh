@@ -1,3 +1,4 @@
+#!/bin/bash
 rm -f report.result
 
 # Remove the name tag

@@ -1,3 +1,4 @@
+#!/bin/bash
 targetdir=$(dirname $0)
 if [ $# -eq 1 ]
 then
