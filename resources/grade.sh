@@ -3,7 +3,7 @@
 # Get options & construct FIFO queues for file I/O
 inputIdx=0
 outputIdx=0
-while getopts "i:o:" opt
+while getopts "i:o:c" opt
 do
 	case $opt in
 		i)
@@ -15,6 +15,11 @@ do
 			outputFile[outputIdx]=$OPTARG
 			mkfifo $OPTARG
 			outputIdx=$((outputIdx + 1))
+			;;
+		c)
+			rm -f executables/*
+			rm -f results/*
+			rm -f report.result
 			;;
 		\?)
 			exit
