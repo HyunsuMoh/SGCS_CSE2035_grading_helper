@@ -64,7 +64,7 @@ do
 		tcname=${testcase#testcases/}
 		for file in ${inputFile[@]}
 		do
-			cat testcases/file/$tcname\_$file > $file &
+			cat testcases/files/$tcname\_$file > $file &
 		done
 		for file in ${outputFile[@]}
 		do
@@ -77,7 +77,7 @@ do
 			echo "" >> results/$id\_$tcname
 			echo "$file:" >> results/$id\_$tcname
 			cat results/$id\_$tcname\_$file >> results/$id\_$tcname
-			temp=$(python3 compare.py answers/file/$tcname\_$file < results/$id\_$tcname\_$file)
+			temp=$(python3 compare.py answers/files/$tcname\_$file < results/$id\_$tcname\_$file)
 			value=$((value * temp))
 		done
 		varname=score_${tcname%.*}
